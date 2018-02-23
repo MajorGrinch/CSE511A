@@ -166,18 +166,22 @@ def aStarSearch(problem, heuristic=nullHeuristic):
     # print start_point
     vis = []
     h = heuristic(start_point, problem)
+    # total_cost = 0
     pque = util.PriorityQueue()
-    pque.push((start_point, []), h)
+    pque.push((start_point, []), 0+h)
     while not pque.isEmpty():
         cur_po, route = pque.pop()
         if problem.isGoalState(cur_po):
             return route
-        vis.append(cur_po)
-        for successor, direction, cost in problem.getSuccessors(cur_po):
-            if successor not in vis:
-                pque.push((successor, route + [direction]),
-                          problem.getCostOfActions(route + [direction]) +
-                          heuristic(successor, problem))
+
+        if cur_po not in vis:
+            vis.append(cur_po)
+            for successor, direction, cost in problem.getSuccessors(cur_po):
+                if successor not in vis:
+                    pque.push(
+                        (successor, route + [direction]),
+                        problem.getCostOfActions(route + [direction]) +
+                        heuristic(successor, problem))
     return []
 
 
